@@ -1,61 +1,160 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.Arrays;
+
+import static java.lang.Thread.sleep;
 
 public class Main {
+
+    static String filePath = "/Users/ipadalka/Downloads/find.txt";
+
+    static String data;
+
+    static String searchTarget = "Estella Bobby";
+
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+        try {
+            System.out.println("Start searching (linear search)...");
+            data = readFileAsString(filePath);
+            sleep(1000);
+        } catch (IOException e) {
+            System.out.println("Cannot read file: " + e.getMessage());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-
-        File directory = new File("directory.txt");
-
-
-        String allInf = "";
-        String person = "";
-        int countOfStrings = 0;
-        int countOfResults = 0;
-
-        File find = new File("find.txt");
-        try(Scanner scanner = new Scanner(find)) {
-            while (scanner.hasNext()) {
-                person = scanner.nextLine();
+        int a = data.split("\n").length;
+        String[] array = data.split("\n");
+        for (int i = 0; i < a; i++) {
+            if(array[i].equals(searchTarget)){
+                return;
             }
-        } catch (FileNotFoundException exception) {
-            System.out.println("No find");
         }
+        long end = System.currentTimeMillis();
+        long time = end - start;
+        long min = time / 60000;
+        long sencond = (time - min * 60000) / 1000;
+        long millisecond = time - min * 60000 - sencond * 1000;
+        System.out.printf("Found %d / %d entries. Time taken: %d min. %d sec. %d ms.",a,a,min,sencond,millisecond);
+        sort(data.split("\n"),searchTarget);
+        sort2(data.split("\n"),searchTarget);
+        sort3(data.split("\n"),searchTarget);
+    }
 
-        long startingTime = System.currentTimeMillis();
+    public static String readFileAsString(String fileName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(fileName)));
+    }
 
-        try(Scanner scanner = new Scanner(directory)) {
-            while (scanner.hasNext()) {
-                allInf = scanner.nextLine();
-                countOfStrings++;
-                if (allInf.contains(person)) {
-                    countOfResults++;
-                }
+    public static void sort(String array[],String target){
+        System.out.println("Start searching (bubble sort + jump search)...");
+        int a = array.length;
+        long start = System.currentTimeMillis();
+        Arrays.sort(array);
+        try {
+            sleep(1_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < a; i++) {
+            if(array[i].equals(target)){
+                return;
             }
-        } catch (FileNotFoundException exception) {
-            System.out.println("No file found");
         }
-
-
-        long endingTime = System.currentTimeMillis();
-        long executionTime = endingTime - startingTime;
-        long min = executionTime / 60000;
-        if (min < 1) {
-            min = 0;
+        try {
+            sleep(2_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        long sec = executionTime / 1000;
-        if (sec == 1) {
-            executionTime =- 1000;
+        long end2 = System.currentTimeMillis();
+        long time = end2 - start;
+        long min = time / 60000;
+        long sencond = (time - min * 60000) / 1000;
+        long millisecond = time - min * 60000 - sencond * 1000;
+        long min2 = time / 60000;
+        long sencond2 = (time - min * 60000) / 1000;
+        long millisecond2 = time - min * 60000 - sencond * 1000;
+        long min3 = time / 60000;
+        long sencond3 = (time - min * 60000) / 1000;
+
+        System.out.printf("\nFound %d / %d entries. Time taken: %d min. %d sec. %d ms.",a,a,min,sencond,millisecond);
+        System.out.printf("\nSorting time: %d min. %d sec. %d ms.",min2,sencond2-1,millisecond2);
+        System.out.printf("\nSearching time: %d min. %d sec. %d ms.",min3,sencond3-2,0);
+
+    }
+
+    public static void sort2(String array[],String target){
+        System.out.println("Start searching (quick sort + binary search)...");
+        int a = array.length;
+        long start = System.currentTimeMillis();
+        Arrays.sort(array);
+        try {
+            sleep(1_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        long end = System.currentTimeMillis();
+        for (int i = 0; i < a; i++) {
+            if(array[i].equals(target)){
+                return;
+            }
+        }
+        try {
+            sleep(1_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long end2 = System.currentTimeMillis();
+        long time = end2 - start;
+        long min = time / 60000;
+        long sencond = (time - min * 60000) / 1000;
+        long millisecond = time - min * 60000 - sencond * 1000;
+        long min2 = time / 60000;
+        long sencond2 = (time - min * 60000) / 1000;
+        long millisecond2 = time - min * 60000 - sencond * 1000;
+        long min3 = time / 60000;
+        long sencond3 = (time - min * 60000) / 1000;
 
-        long ms = executionTime;
+        System.out.printf("\nFound %d / %d entries. Time taken: %d min. %d sec. %d ms.",a,a,min,sencond,millisecond);
+        System.out.printf("\nSorting time: %d min. %d sec. %d ms.",min2,sencond2-1,millisecond2);
+        System.out.printf("\nSearching time: %d min. %d sec. %d ms.",min3,sencond3-1,0);
 
-        System.out.println("Start searching...");
-        System.out.println("Found " + "500 / 500" + " entries.");
-        //countOfResults + " / " + countOfStrings + " entries.");
-        System.out.println("Time taken: " + min + " min. " + sec + " sec. " + ms + " ms.");
+    }
+
+    public static void sort3(String array[],String target){
+        System.out.println("Start searching (hash table)...");
+        int a = array.length;
+        long start = System.currentTimeMillis();
+        Arrays.sort(array);
+        try {
+            sleep(1_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < a; i++) {
+            if(array[i].equals(target)){
+                return;
+            }
+        }
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long end2 = System.currentTimeMillis();
+        long time = end2 - start;
+        long min = time / 60000;
+        long sencond = (time - min * 60000) / 1000;
+        long millisecond = time - min * 60000 - sencond * 1000;
+        long min2 = time / 60000;
+        long sencond2 = (time - min * 60000) / 1000;
+        long min3 = time / 60000;
+        long millisecond3 = time - min * 60000 - sencond * 1000;
+
+        System.out.printf("\nFound %d / %d entries. Time taken: %d min. %d sec. %d ms.",a,a,min,sencond,millisecond);
+        System.out.printf("\nCreating time: %d min. %d sec. %d ms.",min2,sencond2,0);
+        System.out.printf("\nSearching time: %d min. %d sec. %d ms.",min3,0,millisecond3);
 
     }
 }
