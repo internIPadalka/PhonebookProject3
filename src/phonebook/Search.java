@@ -6,8 +6,8 @@ enum Algorithm {
     LINEAR, JUMP, BINARY
 }
 
-abstract public class Search {
-    public static int listSearch(ArrayList<String> directory, ArrayList<String> find, Algorithm algorithm) {
+public class Search {
+    public int listSearch(ArrayList<String> directory, ArrayList<String> find, Algorithm algorithm) {
         int found = 0;
 
         for (String target : find) {
@@ -29,7 +29,7 @@ abstract public class Search {
         return found;
     }
 
-    public static boolean linearSearch(ArrayList<String> directory, String find) {
+    public boolean linearSearch(ArrayList<String> directory, String find) {
         for (String contact : directory) {
             if (contact.equalsIgnoreCase(find)) {
                 return true;
@@ -39,7 +39,7 @@ abstract public class Search {
         return false;
     }
 
-    public static boolean jumpSearch(ArrayList<String> directory, String find) {
+    public boolean jumpSearch(ArrayList<String> directory, String find) {
         int blockSize = (int) Math.floor(Math.sqrt(directory.size()));
 
         int index = 0;
@@ -64,13 +64,15 @@ abstract public class Search {
         return false;
     }
 
-    public static boolean binarySearch(ArrayList<String> directory, String find) {
+    public boolean binarySearch(ArrayList<String> directory, String find) {
         int left = 0;
         int right = directory.size() - 1;
+        int mid;
+        String midElement;
 
         while (left <= right) {
-            int mid = (left + right) / 2;
-            String midElement = directory.get(mid);
+            mid = (left + right) / 2;
+            midElement = directory.get(mid);
 
             if (midElement.equalsIgnoreCase(find)) return true;
             else if (midElement.compareToIgnoreCase(find) > 0) right = mid - 1;
