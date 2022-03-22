@@ -2,8 +2,8 @@ package phonebook;
 
 import java.util.ArrayList;
 
-abstract public class Sort {
-    public static boolean bubbleSort(ArrayList<String> list, long maxTime) {
+public class Sort {
+    public boolean bubbleSort(ArrayList<String> list, long maxTime) {
         long millis = System.currentTimeMillis();
         long limit = maxTime * 10;
 
@@ -29,11 +29,14 @@ abstract public class Sort {
         return true;
     }
 
-    public static void quickSort(ArrayList<String> list, int left, int right) {
+    public void quickSort(ArrayList<String> list, int left, int right) {
+        String pivot;
+        int pointer;
+        int pi;
         if (left < right) {
-            String pivot = list.get(right);
+            pivot = list.get(right);
 
-            int pointer = left - 1;
+            pointer = left - 1;
 
             for (int i = left; i <= right - 1; i++) {
                 if (list.get(i).compareToIgnoreCase(pivot) < 0) {
@@ -45,14 +48,14 @@ abstract public class Sort {
 
             swap(list, pointer + 1, right);
 
-            int pi = (pointer + 1);
+            pi = (pointer + 1);
 
             quickSort(list, left, pi - 1);
             quickSort(list, pi + 1, right);
         }
     }
 
-    private static void swap(ArrayList<String> list, int i, int j) {
+    private void swap(ArrayList<String> list, int i, int j) {
         String temp = list.get(i);
         list.set(i, list.get(j));
         list.set(j, temp);
