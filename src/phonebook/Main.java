@@ -4,15 +4,39 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static phonebook.Search.listSearch;
-import static phonebook.Sort.*;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
+
         Scanner directoryScanner = new Scanner(new File("/Users/ipadalka/Downloads/directory.txt"));
         Scanner findScanner = new Scanner(new File("/Users/ipadalka/Downloads/find.txt"));
 
-        ArrayList<String> directory = new ArrayList<>();
+        ArrayList<String> find;
+        ArrayList<String> directory;
+        ArrayList<String> bubbleSortDirectory;
+        ArrayList<String> quickSortDirectory;
+
+        long beforeLinearSearch;
+        int linearSearchFound;
+        long linerSearchTime;
+        long beforeBubbleJumpSearch;
+        long beforeBubbleSort;
+        boolean bubbleSort;
+        long bubbleSortTime;
+        long beforeJumpSearch;
+        long jumpSearchTime = 0L;
+        int jumpSearchFound;
+        long afterBubbleJumpSearch;
+        long bubbleJumpSearchTime;
+        long beforeQuickBinarySearch;
+        long beforeQuickSort;
+        long quickSortTime;
+        long beforeBinarySearch;
+        int binarySearchFound;
+        long binarySearchTime;
+        long quickBinarySearchTime;
+
+        directory = new ArrayList<>();
         while (directoryScanner.hasNextLine()) {
             String[] parts = directoryScanner.nextLine().split("\\s");
 
@@ -28,8 +52,7 @@ public class Main {
             directory.add(name);
         }
         directoryScanner.close();
-
-        ArrayList<String> find = new ArrayList<>();
+        find = new ArrayList<>();
         while (findScanner.hasNextLine()) {
             find.add(findScanner.nextLine());
         }
@@ -38,10 +61,10 @@ public class Main {
         // Liner Search
         System.out.println("Start searching (linear search)...");
 
-        long beforeLinearSearch = System.currentTimeMillis();
-        int linearSearchFound = listSearch(directory, find, Algorithm.LINEAR);
+        beforeLinearSearch = System.currentTimeMillis();
+        linearSearchFound = new Search().listSearch(directory, find, Algorithm.LINEAR);
 
-        long linerSearchTime = System.currentTimeMillis() - beforeLinearSearch;
+        linerSearchTime = System.currentTimeMillis() - beforeLinearSearch;
 
         System.out.println(found(linearSearchFound, find.size()) + "Time taken: " + formattedTime(linerSearchTime));
 
@@ -50,22 +73,19 @@ public class Main {
         // Bubble Sort + Jump Search
         System.out.println("Start searching (bubble sort + jump search)...");
 
-        long beforeBubbleJumpSearch = System.currentTimeMillis();
+        beforeBubbleJumpSearch = System.currentTimeMillis();
 
         // Bubble Sort
-        long beforeBubbleSort = System.currentTimeMillis();
-        ArrayList<String> bubbleSortDirectory = new ArrayList<>(directory);
-        boolean bubbleSort = bubbleSort(bubbleSortDirectory, linerSearchTime);
+        beforeBubbleSort = System.currentTimeMillis();
+        bubbleSortDirectory = new ArrayList<>(directory);
+        bubbleSort = new Sort().bubbleSort(bubbleSortDirectory, linerSearchTime);
 
-        long bubbleSortTime = System.currentTimeMillis() - beforeBubbleSort;
+        bubbleSortTime = System.currentTimeMillis() - beforeBubbleSort;
 
-        long beforeJumpSearch;
-        long jumpSearchTime = 0L;
-        int jumpSearchFound;
         if (bubbleSort) {
             // Jump Search
             beforeJumpSearch = System.currentTimeMillis();
-            jumpSearchFound = listSearch(bubbleSortDirectory, find, Algorithm.JUMP);
+            jumpSearchFound = new Search().listSearch(bubbleSortDirectory, find, Algorithm.JUMP);
 
             jumpSearchTime = System.currentTimeMillis() - beforeJumpSearch;
 
@@ -73,15 +93,15 @@ public class Main {
         } else {
             // Linear Search
             beforeLinearSearch = System.currentTimeMillis();
-            linearSearchFound = listSearch(bubbleSortDirectory, find, Algorithm.LINEAR);
+            linearSearchFound = new Search().listSearch(bubbleSortDirectory, find, Algorithm.LINEAR);
             linerSearchTime = System.currentTimeMillis() - beforeLinearSearch;
 
             System.out.print(found(linearSearchFound, find.size()));
         }
 
-        long afterBubbleJumpSearch = System.currentTimeMillis();
+        afterBubbleJumpSearch = System.currentTimeMillis();
 
-        long bubbleJumpSearchTime = afterBubbleJumpSearch - beforeBubbleJumpSearch;
+        bubbleJumpSearchTime = afterBubbleJumpSearch - beforeBubbleJumpSearch;
 
         System.out.print("Time Taken: " + formattedTime(bubbleJumpSearchTime));
         System.out.print("\n" + sortingTime(bubbleSortTime));
@@ -98,22 +118,22 @@ public class Main {
         // Quick Sort + Binary Search
         System.out.println("Start searching (quick sort + binary search)...");
 
-        long beforeQuickBinarySearch = System.currentTimeMillis();
+        beforeQuickBinarySearch = System.currentTimeMillis();
 
         // Quick Sort
-        long beforeQuickSort = System.currentTimeMillis();
-        ArrayList<String> quickSortDirectory = new ArrayList<>(directory);
-        quickSort(quickSortDirectory, 0, quickSortDirectory.size() - 1);
+        beforeQuickSort = System.currentTimeMillis();
+        quickSortDirectory = new ArrayList<>(directory);
+        new Sort().quickSort(quickSortDirectory, 0, quickSortDirectory.size() - 1);
 
-        long quickSortTime = System.currentTimeMillis() - beforeQuickSort;
+        quickSortTime = System.currentTimeMillis() - beforeQuickSort;
 
         // Binary Search
-        long beforeBinarySearch = System.currentTimeMillis();
-        int binarySearchFound = listSearch(quickSortDirectory, find, Algorithm.BINARY);
+        beforeBinarySearch = System.currentTimeMillis();
+        binarySearchFound = new Search().listSearch(quickSortDirectory, find, Algorithm.BINARY);
 
-        long binarySearchTime = System.currentTimeMillis() - beforeBinarySearch;
+        binarySearchTime = System.currentTimeMillis() - beforeBinarySearch;
 
-        long quickBinarySearchTime = System.currentTimeMillis() - beforeQuickBinarySearch;
+        quickBinarySearchTime = System.currentTimeMillis() - beforeQuickBinarySearch;
 
         System.out.println(found(binarySearchFound, find.size()) + "Time taken: " + formattedTime(quickBinarySearchTime));
         System.out.println(sortingTime(quickSortTime));
